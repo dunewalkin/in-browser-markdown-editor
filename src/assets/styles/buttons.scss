@@ -1,0 +1,106 @@
+@use './mixins.scss' as *;
+@import './variables';
+
+button {
+   cursor: pointer;
+   transition: .2s ease;
+}
+
+.preview-btn {
+   border: none;
+   background: transparent;
+}
+
+.preview-btn-light svg {
+   fill: var(--clr-neutral-6);  
+}
+
+.preview-btn-dark svg {
+   fill: var(--clr-neutral-10);  
+}
+
+.preview-btn:focus-visible svg,
+.preview-btn:hover svg {
+   fill: var(--clr-primary-1); 
+}
+
+.nav-btn {
+   @include width-height(4.5rem, 4.5rem);
+   @include flexbox (row, center, center, 0);
+   background: var(--clr-neutral-4);
+   border: none;
+
+   &:hover,:focus-visible {
+      background: var(--clr-primary-1);
+   }
+}
+
+.delete-btn {
+   border: none;
+   background: transparent;
+}
+
+.delete-btn svg {
+   fill: var(--clr-neutral-6);  
+}
+
+.delete-btn:focus-visible svg,
+.delete-btn:hover svg {
+   fill: var(--clr-primary-1); 
+}
+
+.primary-btn {
+   border-radius: 0.25rem;
+   background: var(--clr-primary-1); 
+   cursor: pointer;
+
+   &:hover,:focus-visible {
+      background: var(--clr-primary-2);
+   }
+}
+
+.save-btn {
+   @include width-height(9.5rem, 2.5rem);
+   @include flexbox (row, center, center, 0.5rem); 
+}
+
+.create-btn {
+   @include width-height(100%, 2.5rem);
+   border: none;
+   margin-block: 1.81rem 1.5rem;
+}
+
+.toggle-wrapper {
+   @include flexbox(row, flex-start, center, 0.6rem);
+}
+
+.icon-sun-wrapper,
+.icon-moon-wrapper {
+   @include width-height(1.125rem, 1.125rem);
+}
+
+.toggle-btn {
+   position: relative;
+   @include width-height(3rem, 1.5rem);
+   background: var(--clr-neutral-5);
+   border-radius: 1rem;
+   border: none;
+   transition: 0.3s ease;
+   cursor: pointer;
+
+   &::after {
+      content: '';
+      @include position(absolute, 50%, 50%, auto, auto);
+      @include width-height(0.75rem, 0.75rem);
+      background: var(--clr-neutral-10);
+      border-radius: 50%;
+      transform: translate(140%, -50%);
+      transition: 0.3s ease;
+   }
+}
+
+.toggle-active {
+   &::after {
+      transform: translate(-40%, -50%);
+   }
+}

@@ -1,0 +1,60 @@
+@use '../../assets/styles/mixins.scss' as *;
+@import '../../assets/styles/variables';
+
+.header-wrapper {
+   @include width-height(100%, 4.5rem);
+   @include flexbox(row, space-between, center, 0);
+   background: var(--clr-neutral-3);
+   position: fixed;
+   margin-top: 0;
+   z-index: 5;
+}
+
+.header-main-group {
+   @include flexbox(row, start, center, 0);
+}
+
+.logo-doc-wrapper {
+   @include flexbox(row, start, center, 0);
+   margin-left: 1.55rem;
+}
+
+.logo-wrapper {
+   margin-right: 1.88rem;
+}
+
+.doc-info-wrapper {
+   @include flexbox(row, start, center, 1rem);
+}
+
+.header-doc-wrapper {
+   border-left: 1px solid var(--clr-neutral-5);
+   padding-left: 1.5rem;
+}
+
+.header-btn-wrapper {
+   margin-right: 1rem;
+   @include flexbox(row, start, center, 1.5rem);
+}
+
+.nav-wrapper {
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   position: fixed;
+   left: 0;
+   top: 0;
+   @include width-height(15.625rem, 100vh);
+   background: var(--clr-neutral-2);
+   padding: 1.69rem 1.5rem 1.5rem;
+}
+
+.nav-wrapper-hidden {
+   display: none;
+}
+
+.nav-wrapper {
+   .section-header {
+      color: var(--clr-neutral-6);
+   }
+}
