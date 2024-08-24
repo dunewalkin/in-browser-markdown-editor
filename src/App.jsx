@@ -8,26 +8,58 @@ import Preview from './components/preview/Preview';
 import data from './data.json';
 
 function App() {
-   const welcomeContent = data.find(file => file.name === "welcome.md")?.content || '';
-   const [text, setText] = useState(welcomeContent); 
+
+   const [documents, setDocuments] = useState(() => {
+      const welcomeDoc = {
+         createdAt: new Date().toISOString().split('T')[0],
+         name: "welcome.md",
+         content: data.find(file => file.name === "welcome.md")?.content || ''
+      };
+      return [welcomeDoc];
+   });
+
+   const [currentDoc, setCurrentDoc] = useState("welcome.md");
+   const currentDocument = documents.find(doc => doc.name === currentDoc);
+   
+   const [isDeleting, setIsDeleting] = useState(false);
+
+   const [text, setText] = useState(() => {
+      return currentDocument ? currentDocument.content : '';
+   });
    const [isMarkdownVisible, setIsMarkdownVisible] = useState(true);
+   const [isPreviewVisible, setisPreviewVisible] = useState(false);
+   const [isSmallScreen, setIsSmallScreen] = useState(false);
+
    const [isNavVisible, setIsNavVisible] = useState(false);
    const [theme, setTheme] = useState(() => {
       const savedTheme = localStorage.getItem('theme');
       return savedTheme ? savedTheme : 'light';
-    });
-  
-    const toggleTheme = () => {
+   });
+
+   const [docName, setDocName] = useState(currentDoc);
+
+   const updateDocumentName = () => {
+      setDocuments((prevDocuments) =>
+         prevDocuments.map((doc) =>
+            doc.name === currentDoc ? { ...doc, name: docName } : doc
+         )
+      );
+      setCurrentDoc(docName); 
+   };
+
+   useEffect(() => {
+      console.log("Documents array:", documents);
+   }, [documents]);
+
+   const toggleTheme = () => {
       setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
-    };
-  
-    useEffect(() => {
-      // Устанавливаем класс темы на элемент body
+   };
+
+   useEffect(() => {
       document.body.className = theme;
-      // Сохраняем текущую тему в localStorage
       localStorage.setItem('theme', theme);
-    }, [theme]);
-  
+   }, [theme]);
+
 
    const toggleNavVisible = () => {
       setIsNavVisible((navVisible) => !navVisible);
@@ -56,19 +88,85 @@ function App() {
       }
    };
 
-   const togglePreview = () => {
-      setIsMarkdownVisible((markVisible) => !markVisible);
+   useEffect(() => {
+      const handleResize = () => {
+         setIsSmallScreen(window.innerWidth <= 800);
+      };
+
+      handleResize(); 
+      window.addEventListener('resize', handleResize);
+
+      return () => window.removeEventListener('resize', handleResize);
+   }, []);
+
+   const toggleMarkdown = () => {
+
+      if (isSmallScreen) {
+         setIsMarkdownVisible(true);
+         setisPreviewVisible(false);
+      } else {
+         setIsMarkdownVisible((prevState) => !prevState);
+      }
    };
 
+   const togglePreview = () => {
+      if (isSmallScreen) {
+         setIsMarkdownVisible(false);
+         setisPreviewVisible(true);
+      } else {
+         setIsMarkdownVisible((prevState) => !prevState);
+      }
+   };
+   
+
    const saveDocument = () => {
-      const updatedData = data.map(file => {
-         if (file.name === "welcome.md") {
-            return { ...file, content: text }; // обновляем контент файла
+      setDocuments(docs => docs.map(doc => {
+         if (doc.name === currentDoc) {
+            return { ...doc, content: text };
          }
-         return file;
-      });
-      console.log("Updated Data:", updatedData);
-      // Здесь вы можете реализовать логику для сохранения `updatedData` в файл `data.json`.
+         return doc;
+      }));
+      console.log("Updated Documents:", documents);
+   };
+
+   const createNewDocument = () => {
+      const newDocumentName = getUniqueName("untitled-document.md");
+      const newDocument = {
+         createdAt: new Date().toISOString().split('T')[0],
+         name: newDocumentName,
+         content: ''
+      };
+   
+      const updatedData = [...documents, newDocument];
+      setDocuments(updatedData);
+   
+      console.log("Updated Documents Array:", updatedData);
+   
+      setText(newDocument.content);
+      setCurrentDoc(newDocument.name);
+   };
+   
+   const getUniqueName = (baseName) => {
+      let name = baseName;
+      let counter = 1;
+   
+      if (documents.some(doc => doc.name === name)) {
+         while (documents.some(doc => doc.name === name)) {
+            name = `${baseName.slice(0, -3)}-${counter}.md`;
+            counter++;
+         }
+      }
+   
+      return name;
+   };
+   
+   useEffect(() => {
+      const doc = documents.find(file => file.name === currentDoc);
+      setText(doc ? doc.content : '');
+   }, [currentDoc, documents]);
+
+   const handleDocumentClick = (docName) => {
+      setCurrentDoc(docName);
    };
 
    const renderMarkdown = (text) => {
@@ -161,10 +259,8 @@ function App() {
       lines.forEach((line, index) => {
          const trimmedLine = line.trim();
 
-         // Handling code blocks with ```
          if (trimmedLine.startsWith('```')) {
          if (isInCodeBlock) {
-            // Closing code block
             elements.push(
                <div key={`codeblock-${index}`} className="snippet-wrapper">
                {codeBlockContent.map((codeLine, i) => (
@@ -177,7 +273,6 @@ function App() {
             codeBlockContent = [];
             isInCodeBlock = false;
          } else {
-            // Starting new code block
             isInCodeBlock = true;
          }
          return;
@@ -267,6 +362,20 @@ function App() {
       return elements;
    };
 
+   const confirmDeletion = () => {
+      const updatedDocuments = documents.filter(doc => doc.name !== currentDoc);
+      
+      setDocuments(updatedDocuments);
+
+      if (updatedDocuments.length > 0) {
+         setCurrentDoc(updatedDocuments[0].name);  
+      } else {
+         setCurrentDoc('');  
+      }
+
+      setIsDeleting(false);
+   };
+
    return ( 
       <>
          <Header
@@ -275,21 +384,40 @@ function App() {
             isNavVisible={isNavVisible}
             toggleNavVisible={toggleNavVisible}
             saveDocument={saveDocument}
+            createNewDocument={createNewDocument}
+            currentDoc={currentDoc}
+            currentDocDate={currentDocument ? currentDocument.createdAt : ''}
+            documents={documents}
+            setCurrentDoc={setCurrentDoc}
+            handleDocumentClick={handleDocumentClick}
+            confirmDeletion={confirmDeletion}
+            isDeleting={isDeleting}
+            setIsDeleting={setIsDeleting}
+            updateDocumentName={updateDocumentName}
+            docName={docName}
+            setDocName={setDocName}
          />
          <div className={`markdown-wrapper ${isNavVisible ? 'phased-wrapper' : ''}`}>
+         {isMarkdownVisible && (
             <Editor
                text={text}
+               theme={theme}
                handleChange={handleChange}
                handleKeyDown={handleKeyDown}
                isMarkdownVisible={isMarkdownVisible}
+               isSmallScreen={isSmallScreen}
+               togglePreview={togglePreview} 
             />
+         )}
+         {(isPreviewVisible || !isSmallScreen) && (
             <Preview 
                text={text} 
                theme={theme}
                renderMarkdown={renderMarkdown} 
                isMarkdownVisible={isMarkdownVisible}
-               togglePreview={togglePreview}
+               toggleMarkdown={toggleMarkdown}
             />
+         )}
          </div>
       </>
       
@@ -298,42 +426,4 @@ function App() {
 
 export default App;
 
-
-
-
-
-// # Welcome to Markdown
-
-// Markdown is a lightweight markup language that you can use to add formatting elements to plaintext text documents.
-
-// ## How to use this?
-
-// 1. Write markdown in the markdown editor window
-// 2. See the rendered markdown in the preview window
-
-// ### Features
-
-// - Create previews, paragraphs, links, blockquotes, inline-code, code blocks, and lists
-// - Name and save the document to access again later
-// - Choose between Light or Dark mode depending on your preference
-
-// > This is an example of a blockquote. If you would like to learn more about markdown syntax, you can visit this [markdown cheatsheet](https://www.markdownguide.org/cheat-sheet/).
-
-// #### previews
-
-// To create a preview, add the hash sign (#) before the preview. The number of number signs you use should correspond to the preview level. You'll see in this guide that we've used all six preview levels (not necessarily in the correct way you should use previews!) to illustrate how they should look.
-
-// ##### Lists
-
-// You can see examples of ordered and unordered lists above.
-
-// ###### Code Blocks
-
-// This markdown editor allows for inline-code snippets, like this: `<p>I'm inline</p>`. It also allows for larger code blocks like this:
-
-// ```
-// <main>
-//   <h1>This is a larger code block</h1>
-// </main>
-// ```
 
