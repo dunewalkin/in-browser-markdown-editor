@@ -33,10 +33,6 @@ button {
    &:hover,:focus-visible {
       background: var(--clr-primary-1);
    }
-
-   @include mq(small) {
-      @include width-height(3.5rem, 3.5rem);
-   }
 }
 
 .delete-btn {
@@ -65,19 +61,7 @@ button {
 
 .save-btn {
    @include width-height(9.5rem, 2.5rem);
-   @include flexbox (row, center, center, 0.5rem);
-   
-   @include mq(small) {
-      @include width-height(2.5rem, 2.5rem);
-   }
-}
-
-.save-btn span {
-   display: block;
-
-   @include mq(small) {
-      display: none;
-   }
+   @include flexbox (row, center, center, 0.5rem); 
 }
 
 .create-btn {
@@ -120,34 +104,3 @@ button {
       transform: translate(-40%, -50%);
    }
 }
-
-
-.header-doc-wrapper {
-   cursor: pointer;
-}
-
-.doc-name-input {
-   position: relative;
-   border: none;
-   background: none;
-   padding: 0;
-   margin: 0;
-   box-shadow: none;
-   outline: none;
-   font: inherit;
-   border-radius: 0;
-   color: var(--clr-neutral-10);
-   border-bottom: 1px solid var(--clr-neutral-10);
-   caret-color: var(--clr-primary-1);
-}
-
-.nav-doc-btn {
-   cursor: pointer;
-}
-
-.nav-doc-btn:hover .doc-name,
-.nav-doc-btn:focus-within .doc-name {
-   color: var(--clr-primary-1)
-}
-
-
