@@ -8,6 +8,11 @@
 .result-wide {
    max-width: 42rem;
    margin: 0 auto;
+   padding-block: 4rem 1.38rem;
+
+   @include mq (small) {
+      padding-block: 3.625rem 1.38rem;
+   }
 }
 
 .primary-padding {
