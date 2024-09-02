@@ -1,0 +1,120 @@
+@use './mixins.scss' as *;
+@import './variables';
+
+.preview-xl {
+   font-family: "Roboto Slab";
+   font-size: 2rem;
+   font-style: normal;
+   font-weight: 700;
+   line-height: normal;
+   color: var(--clr-text-3);
+}
+
+.preview-l {
+   font-family: "Roboto Slab";
+   font-size: 1.75rem;
+   font-style: normal;
+   font-weight: 400;
+   line-height: normal;
+   color: var(--clr-text-3);
+}
+
+.preview-m {
+   font-family: "Roboto Slab";
+   font-size: 1.5rem;
+   font-style: normal;
+   font-weight: 700;
+   line-height: normal;
+   color: var(--clr-text-3);
+}
+
+.preview-s {
+   font-family: "Roboto Slab";
+   font-size: 1.25rem;
+   font-style: normal;
+   font-weight: 700;
+   line-height: normal;
+   color: var(--clr-text-3);
+}
+
+.preview-xs {
+   font-family: "Roboto Slab";
+   font-size: 1rem;
+   font-style: normal;
+   font-weight: 700;
+   line-height: normal;
+   color: var(--clr-text-3);
+}
+
+.preview-xxs {
+   font-family: "Roboto Slab";
+   font-size: 0.875rem;
+   font-style: normal;
+   font-weight: 700;
+   line-height: normal;
+   color: var(--clr-primary-1);
+}
+
+.heading-m {
+   font-family: Roboto;
+   font-size: 0.9375rem;
+   font-style: normal;
+   font-weight: 400;
+   line-height: normal;
+   color: var(--clr-neutral-10);
+}
+
+.body {
+   font-family: "Roboto Slab";
+   font-size: 0.875rem;
+   font-style: normal;
+   font-weight: 400;
+   line-height: 1.5rem;
+   color: var(--clr-neutral-6);
+}
+
+.body-bold {
+   font-family: "Roboto Slab";
+   font-size: 0.875rem;
+   font-style: normal;
+   font-weight: 700;
+   line-height: 1.5rem;
+   color: var(--clr-text-3);
+}
+
+.body-m {
+   font-family: Roboto;
+   font-size: 0.8125rem;
+   font-style: normal;
+   font-weight: 300;
+   line-height: normal;
+   color: var(--clr-neutral-6);
+}
+
+.section-header {
+   font-family: Roboto;
+   font-size: 0.875rem;
+   font-style: normal;
+   font-weight: 500;
+   line-height: normal;
+   letter-spacing: 0.125rem;
+   color: var(--clr-text-1);
+}
+
+.editor-text {
+   font-family: "Roboto Mono";
+   font-size: 0.875rem;
+   font-style: normal;
+   font-weight: 400;
+   line-height: 1.5rem; 
+   color: var(--clr-text-2);
+}
+
+.snippet-text {
+   font-family: "Roboto Mono";
+   font-size: 0.875rem;
+   font-style: normal;
+   font-weight: 400;
+   line-height: 1.5rem;
+   color: var(--clr-text-3);
+}

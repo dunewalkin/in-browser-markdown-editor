@@ -24,6 +24,9 @@
    @include flexbox(row, start, center, 0);
    margin-left: 1.55rem;
 
+   @include mq (small) {
+      margin-right: 1rem;
+   }
 }
 
 .logo-wrapper-header {
@@ -47,6 +50,32 @@
       border-left:none;
       padding-left: 0; 
    }
+}
+
+.header-doc-wrapper {
+   cursor: pointer;
+}
+
+.header-doc-info {
+   @include flexbox(column, center, start, 0);
+   width: 100%;
+
+   @include mq (small) {
+      max-width: clamp(6rem, 33vw, 20rem);
+   }
+}
+
+.header-doc-name {
+   display: block;
+
+   @include mq (small) {
+      display: none;
+   }
+}
+
+.current-doc-name {
+   width: 100%;
+   word-wrap: break-word;
 }
 
 .header-btn-wrapper {
@@ -92,17 +121,7 @@
    @include flexbox(column, start, start, 1.62rem);
 }
 
-.header-doc-wrapper {
-   cursor: pointer;
-}
 
-.header-doc-name {
-   display: block;
-
-   @include mq (small) {
-      display: none;
-   }
-}
 
 // Condirm delete wrapper
 
@@ -137,3 +156,5 @@
    opacity: 0.5;
    z-index: 70;
 }
+
+

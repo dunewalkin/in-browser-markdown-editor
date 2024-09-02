@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import './assets/styles/fonts.scss';
+import './assets/styles/typography.scss'
 import './assets/styles/global.scss';
 import './assets/styles/buttons.scss';
 import Header from './components/header/Header';
@@ -37,15 +38,6 @@ function App() {
    });
 
    const [docName, setDocName] = useState(currentDoc);
-
-   const updateDocumentName = () => {
-      setDocuments((prevDocuments) =>
-         prevDocuments.map((doc) =>
-            doc.name === currentDoc ? { ...doc, name: docName } : doc
-         )
-      );
-      setCurrentDoc(docName); 
-   };
 
    useEffect(() => {
       console.log("Documents array:", documents);
@@ -110,6 +102,7 @@ function App() {
    };
 
    const togglePreview = () => {
+
       if (isSmallScreen) {
          setIsMarkdownVisible(false);
          setisPreviewVisible(true);
@@ -117,7 +110,6 @@ function App() {
          setIsMarkdownVisible((prevState) => !prevState);
       }
    };
-   
 
    const saveDocument = () => {
       setDocuments(docs => docs.map(doc => {
@@ -145,7 +137,7 @@ function App() {
       setText(newDocument.content);
       setCurrentDoc(newDocument.name);
    };
-   
+
    const getUniqueName = (baseName) => {
       let name = baseName;
       let counter = 1;
@@ -158,6 +150,15 @@ function App() {
       }
    
       return name;
+   };
+
+   const updateDocumentName = () => {
+      setDocuments((prevDocuments) =>
+         prevDocuments.map((doc) =>
+            doc.name === currentDoc ? { ...doc, name: docName } : doc
+         )
+      );
+      setCurrentDoc(docName); 
    };
    
    useEffect(() => {
@@ -396,6 +397,7 @@ function App() {
             updateDocumentName={updateDocumentName}
             docName={docName}
             setDocName={setDocName}
+            isSmallScreen={isSmallScreen}
          />
          <div className={`markdown-wrapper ${isNavVisible ? 'phased-wrapper' : ''}`}>
          {isMarkdownVisible && (

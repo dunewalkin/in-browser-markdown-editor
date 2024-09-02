@@ -130,7 +130,7 @@ button {
    }
 }
 
-input {
+.doc-name-input {
    width: 15rem;
    border: none;
    background: none;
@@ -145,7 +145,9 @@ input {
    caret-color: var(--clr-primary-1);
 
    @include mq (small) {
-      width: auto;
+      width: 100%;
+      overflow: hidden;
    }
 
 }
+

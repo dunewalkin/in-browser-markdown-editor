@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-
 import './header.scss';
 import menuOpenIcon from '../../assets/images/icon-menu.svg';
 import menuCloseIcon from '../../assets/images/icon-close.svg';
@@ -11,12 +10,9 @@ import iconSunDark from '../../assets/images/icon-sun-dark.svg';
 import iconMoonLight from '../../assets/images/icon-moon-light.svg';
 import iconMoonDark from '../../assets/images/icon-moon-dark.svg';
 
-
 function Header({ isNavVisible, toggleNavVisible, theme, toggleTheme, saveDocument, currentDoc, createNewDocument, currentDocDate, documents, setCurrentDoc, confirmDeletion, isDeleting, setIsDeleting, updateDocumentName, docName, setDocName }) {
 
    const [isEditing, setIsEditing] = useState(false);
-   // const [docName, setDocName] = useState(currentDoc);
-   // const [isDeleting, setIsDeleting] = useState(false);
 
    const formatDate = (dateString) => {
       const options = { day: '2-digit', month: 'long', year: 'numeric' };
@@ -53,7 +49,7 @@ function Header({ isNavVisible, toggleNavVisible, theme, toggleTheme, saveDocume
          if (extensionIndex !== -1) {
             document.querySelector('.doc-name-input').setSelectionRange(0, extensionIndex); 
          }
-      }, 0); // Используем setTimeout для обеспечения срабатывания после изменения состояния
+      }, 0); 
    };
    
 
@@ -81,7 +77,7 @@ function Header({ isNavVisible, toggleNavVisible, theme, toggleTheme, saveDocume
                         className='nav-doc-btn doc-info-wrapper'
                         onClick={() => setCurrentDoc(doc.name)} 
                      >
-                        <img src={documentIcon} alt="" />
+                        <img src={documentIcon} alt='Document' />
                         <div className='header-doc-info'>
                            <p className='current-doc-date body-m'>{formatDate(doc.createdAt)}</p>
                            <span className='doc-name heading-m'>{doc.name}</span>
@@ -92,7 +88,7 @@ function Header({ isNavVisible, toggleNavVisible, theme, toggleTheme, saveDocume
             </div>
             <div className='toggle-wrapper'>  
                <div className='icon-moon-wrapper'>
-                  <img src={theme === 'light' ? iconMoonDark : iconMoonLight} alt={`Icon Moon ${theme === 'light' ? 'Dark' : 'Light'}`} />
+                  <img src={theme === 'light' ? iconMoonDark : iconMoonLight} alt={`Moon ${theme === 'light' ? 'dark' : 'light'}`} />
                </div>        
                <div 
                   className={`toggle-btn ${theme === 'dark' ? 'toggle-active' : ''}`}
@@ -100,7 +96,7 @@ function Header({ isNavVisible, toggleNavVisible, theme, toggleTheme, saveDocume
                   role="button">
                </div>
                <div className='icon-sun-wrapper'>
-                  <img src={theme === 'light' ? iconSunLight : iconSunDark} alt={`Icon Sun ${theme === 'light' ? 'Light' : 'Dark'}`}/>            
+                  <img src={theme === 'light' ? iconSunLight : iconSunDark} alt={`Sun ${theme === 'light' ? 'light' : 'dark'}`}/>            
                </div>            
             </div>
          </div>
@@ -109,7 +105,7 @@ function Header({ isNavVisible, toggleNavVisible, theme, toggleTheme, saveDocume
                <button 
                   onClick={toggleNavVisible}
                   className='nav-btn'>
-                     <img src={isNavVisible ? menuCloseIcon : menuOpenIcon} alt="" />
+                     <img src={isNavVisible ? menuCloseIcon : menuOpenIcon} alt={isNavVisible ? 'Close menu' : 'Open menu'} />
                </button>
                <div className='logo-doc-wrapper'>
                   <div className='logo-wrapper-header'>
@@ -119,11 +115,11 @@ function Header({ isNavVisible, toggleNavVisible, theme, toggleTheme, saveDocume
                      className='doc-info-wrapper header-doc-wrapper'
                      onClick={changeDocName} 
                   >
-                     <img src={documentIcon} alt="" />
+                     <img src={documentIcon} alt='Document' />
                      <div className='header-doc-info'>
                         <p className='header-doc-name body-m'>Document Name</p>
-                           {isEditing ? (
-                              <input
+                            {isEditing ? (
+                            <input
                                  type="text"
                                  className="doc-name-input"
                                  value={docName}
@@ -135,11 +131,10 @@ function Header({ isNavVisible, toggleNavVisible, theme, toggleTheme, saveDocume
                            ) : (
                               <span
                                  className='current-doc-name heading-m'
-                                 
                                  >
                                     {currentDoc}
                               </span>
-                           )}
+                           )} 
                      </div>
                   </div>
                </div>
@@ -151,7 +146,7 @@ function Header({ isNavVisible, toggleNavVisible, theme, toggleTheme, saveDocume
                   <svg width="18" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M7 16a1 1 0 0 0 1-1V9a1 1 0 1 0-2 0v6a1 1 0 0 0 1 1ZM17 4h-4V3a3 3 0 0 0-3-3H8a3 3 0 0 0-3 3v1H1a1 1 0 1 0 0 2h1v11a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V6h1a1 1 0 0 0 0-2ZM7 3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v1H7V3Zm7 14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6h10v11Zm-3-1a1 1 0 0 0 1-1V9a1 1 0 0 0-2 0v6a1 1 0 0 0 1 1Z" fill=""/></svg>
                </button>
                <div className='primary-btn save-btn' onClick={saveDocument}>
-                  <img src={saveIcon} alt="Save Icon" />
+                  <img src={saveIcon} alt="Save" />
                   <span className='heading-m'>Save Changes</span>
                </div>
             </div>
@@ -174,9 +169,9 @@ function Header({ isNavVisible, toggleNavVisible, theme, toggleTheme, saveDocume
          {isDeleting && (
             <div className='overlay' onClick={() => setIsDeleting(false)}></div>
          )}
-         
       </>
    );
 }
 
 export default Header;
+
