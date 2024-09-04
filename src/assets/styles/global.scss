@@ -50,6 +50,16 @@ body {
    overflow-x: hidden;
 }
 
+textarea {
+   touch-action: manipulation;
+   user-select: none;
+   -webkit-user-select: none;
+   -ms-user-select: none;
+   -webkit-text-size-adjust: 100%;
+   -moz-text-size-adjust: 100%;
+   text-size-adjust: 100%;
+}
+
 // light/dark variables
 
 body {
