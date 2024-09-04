@@ -10,6 +10,7 @@ function Editor({ text, handleChange, handleKeyDown, isMarkdownVisible, theme, t
                {isSmallScreen && (
                   <button 
                   className={`preview-btn ${theme === 'dark' ? 'preview-btn-dark' : 'preview-btn-light'}`}
+                  aria-label="Toggle markdown"
                   onClick={togglePreview}
                   >
                   {isMarkdownVisible ? 
@@ -20,6 +21,7 @@ function Editor({ text, handleChange, handleKeyDown, isMarkdownVisible, theme, t
             </div>
             <textarea
                className="editor-text primary-padding"
+               aria-label="Markdown editor"
                value={text}
                onChange={handleChange}
                onKeyDown={handleKeyDown}
