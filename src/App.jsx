@@ -136,6 +136,8 @@ function App() {
    
       setText(newDocument.content);
       setCurrentDoc(newDocument.name);
+
+      setIsNavVisible(false);
    };
 
    const getUniqueName = (baseName) => {
@@ -383,6 +385,7 @@ function App() {
             theme={theme}
             toggleTheme={toggleTheme}
             isNavVisible={isNavVisible}
+            setIsNavVisible={setIsNavVisible}
             toggleNavVisible={toggleNavVisible}
             saveDocument={saveDocument}
             createNewDocument={createNewDocument}

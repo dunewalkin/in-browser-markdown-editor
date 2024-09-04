@@ -10,21 +10,21 @@ import iconSunDark from '../../assets/images/icon-sun-dark.svg';
 import iconMoonLight from '../../assets/images/icon-moon-light.svg';
 import iconMoonDark from '../../assets/images/icon-moon-dark.svg';
 
-function Header({ isNavVisible, toggleNavVisible, theme, toggleTheme, saveDocument, currentDoc, createNewDocument, currentDocDate, documents, setCurrentDoc, confirmDeletion, isDeleting, setIsDeleting, updateDocumentName, docName, setDocName }) {
+function Header({ isNavVisible, setIsNavVisible, toggleNavVisible, theme, toggleTheme, saveDocument, currentDoc, createNewDocument, currentDocDate, documents, setCurrentDoc, confirmDeletion, isDeleting, setIsDeleting, updateDocumentName, docName, setDocName, isSmallScreen }) {
 
    const [isEditing, setIsEditing] = useState(false);
 
    useEffect(() => {
+      
       const handleClickOutside = (e) => {
          const navWrapper = document.querySelector('.nav-wrapper');
          if (navWrapper && !navWrapper.contains(e.target) && isNavVisible) {
-            toggleNavVisible(); // Скрываем меню при клике вне .nav-wrapper
+            toggleNavVisible(); 
          }
       };
 
       document.addEventListener('mousedown', handleClickOutside);
-      
-      // Удаляем обработчик при размонтировании компонента
+
       return () => {
          document.removeEventListener('mousedown', handleClickOutside);
       };
@@ -67,8 +67,12 @@ function Header({ isNavVisible, toggleNavVisible, theme, toggleTheme, saveDocume
          }
       }, 0); 
    };
-   
 
+   const handleDocumentSelection = (docName) => {
+      setCurrentDoc(docName);
+      setIsNavVisible(false);
+   };
+   
    const deleteDocument = () => {
       setIsDeleting(true);
    }
@@ -91,7 +95,7 @@ function Header({ isNavVisible, toggleNavVisible, theme, toggleTheme, saveDocume
                      <div 
                         key={doc.name} 
                         className='nav-doc-btn doc-info-wrapper'
-                        onClick={() => setCurrentDoc(doc.name)} 
+                        onClick={() => handleDocumentSelection(doc.name)} 
                      >
                         <img src={documentIcon} alt='Document' />
                         <div className='header-doc-info'>
