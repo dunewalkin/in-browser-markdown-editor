@@ -110,7 +110,11 @@ body.dark {
 
 .phased-wrapper {
    transform: translateX(15.625rem);
-   position: fixed;
+
+   @include mq(small) {
+      position: fixed;
+   }
+   
 }
 
 
