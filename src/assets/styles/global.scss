@@ -81,7 +81,7 @@ body.dark {
 
 .markdown-wrapper {
    display: flex;
-   height: 100vh;
+   @include width-height(100%, 100vh);
    padding-top: 4.5rem;
 
    @include mq(small) {
