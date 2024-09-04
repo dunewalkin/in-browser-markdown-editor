@@ -14,6 +14,22 @@ function Header({ isNavVisible, toggleNavVisible, theme, toggleTheme, saveDocume
 
    const [isEditing, setIsEditing] = useState(false);
 
+   useEffect(() => {
+      const handleClickOutside = (e) => {
+         const navWrapper = document.querySelector('.nav-wrapper');
+         if (navWrapper && !navWrapper.contains(e.target) && isNavVisible) {
+            toggleNavVisible(); // Скрываем меню при клике вне .nav-wrapper
+         }
+      };
+
+      document.addEventListener('mousedown', handleClickOutside);
+      
+      // Удаляем обработчик при размонтировании компонента
+      return () => {
+         document.removeEventListener('mousedown', handleClickOutside);
+      };
+   }, [isNavVisible, toggleNavVisible]);
+
    const formatDate = (dateString) => {
       const options = { day: '2-digit', month: 'long', year: 'numeric' };
       return new Date(dateString).toLocaleDateString('en-GB', options);
@@ -29,9 +45,9 @@ function Header({ isNavVisible, toggleNavVisible, theme, toggleTheme, saveDocume
 
    const handleBlur = () => {
       if (docName.trim() === '') {
-      setDocName(currentDoc); 
+         setDocName(currentDoc); 
       } else {
-      updateDocumentName(docName.trim()); 
+         updateDocumentName(docName.trim()); 
       }
       setIsEditing(false); 
    };
@@ -174,4 +190,3 @@ function Header({ isNavVisible, toggleNavVisible, theme, toggleTheme, saveDocume
 }
 
 export default Header;
-
