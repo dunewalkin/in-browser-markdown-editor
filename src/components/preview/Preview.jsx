@@ -1,7 +1,13 @@
 import React from 'react';
 import './preview.scss';
 
-function Preview({ renderMarkdown, text, isMarkdownVisible, toggleMarkdown, theme }) {
+function Preview({ 
+   renderMarkdown,
+   text,
+   isMarkdownVisible,
+   toggleMarkdown,
+   theme
+}) {
    return (
       <div className="preview">
          <div className={`primary-padding header-section ${isMarkdownVisible ? '' :'header-section-wide' }`}>

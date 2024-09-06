@@ -1,7 +1,15 @@
 import React from 'react';
 import './editor.scss';
 
-function Editor({ text, handleChange, handleKeyDown, isMarkdownVisible, theme, togglePreview, isSmallScreen }) {
+function Editor({ 
+   text,
+   handleChange,
+   handleKeyDown,
+   isMarkdownVisible,
+   theme,
+   togglePreview,
+   isSmallScreen
+}) {
    return ( 
       <div className="editor">
          <div className={`primary-padding header-section ${!isMarkdownVisible ? '' : 'header-section-wide' }`}>                  

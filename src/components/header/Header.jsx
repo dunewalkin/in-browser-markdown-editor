@@ -10,7 +10,24 @@ import iconSunDark from '../../assets/images/icon-sun-dark.svg';
 import iconMoonLight from '../../assets/images/icon-moon-light.svg';
 import iconMoonDark from '../../assets/images/icon-moon-dark.svg';
 
-function Header({ isNavVisible, setIsNavVisible, toggleNavVisible, theme, toggleTheme, saveDocument, currentDoc, createNewDocument, currentDocDate, documents, setCurrentDoc, confirmDeletion, isDeleting, setIsDeleting, updateDocumentName, docName, setDocName, isSmallScreen }) {
+function Header({ 
+   isNavVisible,
+   setIsNavVisible,
+   toggleNavVisible,
+   theme,
+   toggleTheme,
+   saveDocument,
+   currentDoc,
+   createNewDocument,
+   documents,
+   setCurrentDoc,
+   confirmDeletion,
+   isDeleting,
+   setIsDeleting,
+   updateDocumentName,
+   docName,
+   setDocName 
+}) {
 
    const [isEditing, setIsEditing] = useState(false);
 
