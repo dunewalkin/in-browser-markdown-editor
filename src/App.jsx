@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
+import Header from './components/header/Header';
+import Editor from './components/editor/Editor';
+import Preview from './components/preview/Preview';
 import './assets/styles/fonts.scss';
 import './assets/styles/typography.scss'
 import './assets/styles/global.scss';
 import './assets/styles/buttons.scss';
-import Header from './components/header/Header';
-import Editor from './components/editor/Editor';
-import Preview from './components/preview/Preview';
+
 import data from './data.json';
 
 function App() {

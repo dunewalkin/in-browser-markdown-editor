@@ -1,0 +1,38 @@
+@use '../../assets/styles/mixins.scss' as *;
+@import '../../assets/styles/variables';
+
+.nav-wrapper {
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   position: fixed;
+   left: 0;
+   top: 0;
+   @include width-height(15.625rem, 100vh);
+   background: var(--clr-neutral-2);
+   padding: 1.69rem 1.5rem 1.5rem;
+}
+
+.nav-wrapper-hidden {
+   display: none;
+}
+
+.nav-wrapper {
+   .section-header {
+      color: var(--clr-neutral-6);
+   }
+}
+
+.logo-wrapper-nav {
+   display: none;
+
+   @include mq (medium) {
+      margin-bottom: 1.69rem;
+      display:block;
+   }
+   
+}
+
+.documents-wrapper {
+   @include flexbox(column, start, start, 1.62rem);
+}

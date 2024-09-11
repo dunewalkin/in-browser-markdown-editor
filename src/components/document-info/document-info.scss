@@ -1,0 +1,39 @@
+@use '../../assets/styles/mixins.scss' as *;
+@import '../../assets/styles/variables';
+
+.doc-info-wrapper {
+   @include flexbox(row, start, center, 1rem);
+}
+
+.header-doc-wrapper {
+   padding-left: 1.5rem;
+   border-left: 1px solid var(--clr-neutral-5);
+   cursor: pointer;
+
+   @include mq (medium) {
+      border-left:none;
+      padding-left: 0; 
+   }
+}
+
+.header-doc-info {
+   @include flexbox(column, center, start, 0);
+   width: 100%;
+
+   @include mq (small) {
+      max-width: clamp(6rem, 33vw, 20rem);
+   }
+}
+
+.header-doc-name {
+   display: block;
+
+   @include mq (small) {
+      display: none;
+   }
+}
+
+.current-doc-name {
+   width: 100%;
+   word-wrap: break-word;
+}

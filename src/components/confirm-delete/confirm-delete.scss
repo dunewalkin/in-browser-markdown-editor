@@ -1,0 +1,34 @@
+@use '../../assets/styles/mixins.scss' as *;
+@import '../../assets/styles/variables';
+
+.confirm-delete-wrapper {
+   @include width-height(21.4375rem, 13.625rem);
+   @include flexbox(column, start, start, 1rem);
+   @include position(absolute, 50%, 50%, 50%, 50%);
+   padding: 1.5rem;
+   border-radius: 0.25rem;
+   background: var(--clr-background-2);
+   transform: translate(-50%, -50%);
+   z-index: 100;
+}
+
+.confirm-delete-wrapper p {
+   color: var(--clr-text-1);
+}
+
+.confirm-delete-wrapper {
+   .primary-btn {
+      @include width-height(100%, 2.5rem);
+      @include flexbox(column, center, center, 0);
+      border: none;
+   }
+}
+
+.overlay {
+   display: block;
+   position: fixed;
+   @include width-height(100%, 100vh);
+   background: var(--clr-neutral-6);
+   opacity: 0.5;
+   z-index: 70;
+}

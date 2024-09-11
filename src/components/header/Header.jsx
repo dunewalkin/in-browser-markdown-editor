@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import './header.scss';
+import ConfirmDelete from '../confirm-delete/ConfirmDelete';
+import DocumentInfo from '../document-info/DocumentInfo';
+import Navigation from '../navigation/Navigation';
 import menuOpenIcon from '../../assets/images/icon-menu.svg';
 import menuCloseIcon from '../../assets/images/icon-close.svg';
 import logo from '../../assets/images/logo.svg';
-import documentIcon from '../../assets/images/icon-document.svg';
 import saveIcon from '../../assets/images/icon-save.svg';
-import iconSunLight from '../../assets/images/icon-sun-light.svg';
-import iconSunDark from '../../assets/images/icon-sun-dark.svg';
-import iconMoonLight from '../../assets/images/icon-moon-light.svg';
-import iconMoonDark from '../../assets/images/icon-moon-dark.svg';
+
 
 function Header({ 
    isNavVisible,
@@ -96,47 +95,16 @@ function Header({
 
    return (
       <> 
-         <div className={isNavVisible ? 'nav-wrapper' : 'nav-wrapper-hidden'}>
-            <div>
-               <div className='logo-wrapper-nav'>
-                  <img src={logo} alt="Logo" />
-               </div>
-               <h1 className='section-header'>
-                  MY DOCUMENTS
-               </h1>
-               <button className='primary-btn create-btn' onClick={createNewDocument}>
-                  <span className='heading-m'>+ New Document</span>
-               </button>
-               <div className='documents-wrapper'>
-                  {documents.map((doc) => (
-                     <div 
-                        key={doc.name} 
-                        className='nav-doc-btn doc-info-wrapper'
-                        onClick={() => handleDocumentSelection(doc.name)} 
-                     >
-                        <img src={documentIcon} alt='Document' />
-                        <div className='header-doc-info'>
-                           <p className='current-doc-date body-m'>{formatDate(doc.createdAt)}</p>
-                           <span className='doc-name heading-m'>{doc.name}</span>
-                        </div>
-                     </div>
-                  ))}
-               </div>
-            </div>
-            <div className='toggle-wrapper'>  
-               <div className='icon-moon-wrapper'>
-                  <img src={theme === 'light' ? iconMoonDark : iconMoonLight} alt={`Moon ${theme === 'light' ? 'dark' : 'light'}`} />
-               </div>        
-               <div 
-                  className={`toggle-btn ${theme === 'dark' ? 'toggle-active' : ''}`}
-                  onClick={toggleTheme}
-                  role="button">
-               </div>
-               <div className='icon-sun-wrapper'>
-                  <img src={theme === 'light' ? iconSunLight : iconSunDark} alt={`Sun ${theme === 'light' ? 'light' : 'dark'}`}/>            
-               </div>            
-            </div>
-         </div>
+         <Navigation 
+            isNavVisible={isNavVisible} 
+            toggleNavVisible={toggleNavVisible} 
+            documents={documents} 
+            createNewDocument={createNewDocument} 
+            handleDocumentSelection={handleDocumentSelection} 
+            formatDate={formatDate} 
+            theme={theme} 
+            toggleTheme={toggleTheme}
+         />
          <header className={`header-wrapper ${isNavVisible ? 'phased-wrapper' : ''}`}>
             <div className='header-main-group'>
                <button 
@@ -148,32 +116,15 @@ function Header({
                   <div className='logo-wrapper-header'>
                      <img src={logo} alt="Logo" />
                   </div>
-                  <div 
-                     className='doc-info-wrapper header-doc-wrapper'
-                     onClick={changeDocName} 
-                  >
-                     <img src={documentIcon} alt='Document' />
-                     <div className='header-doc-info'>
-                        <p className='header-doc-name body-m'>Document Name</p>
-                            {isEditing ? (
-                            <input
-                                 type="text"
-                                 className="doc-name-input"
-                                 value={docName}
-                                 onChange={handleDocNameChange}
-                                 onBlur={handleBlur}   
-                                 onKeyDown={handleKeyDown} 
-                                 autoFocus
-                              />
-                           ) : (
-                              <span
-                                 className='current-doc-name heading-m'
-                                 >
-                                    {currentDoc}
-                              </span>
-                           )} 
-                     </div>
-                  </div>
+                  <DocumentInfo 
+                     isEditing={isEditing} 
+                     docName={docName} 
+                     currentDoc={currentDoc} 
+                     handleDocNameChange={handleDocNameChange} 
+                     handleBlur={handleBlur} 
+                     handleKeyDown={handleKeyDown} 
+                     changeDocName={changeDocName}
+                  />
                </div>
             </div>
             <div className='header-btn-wrapper'>
@@ -190,22 +141,11 @@ function Header({
             </div>
          </header>
          {isDeleting && (
-            <div className='confirm-delete-wrapper'>
-               <h1 className='preview-s'>
-                  Delete this document?
-               </h1>
-               <p className='body'>
-                  Are you sure you want to delete '{currentDoc}' document and its contents? This action cannot be reversed.
-               </p>
-               <button className='primary-btn' 
-               onClick={confirmDeletion}
-               >
-                  <span className='heading-m'>Confirm & Delete</span>
-               </button>
-            </div>
-         )}
-         {isDeleting && (
-            <div className='overlay' onClick={() => setIsDeleting(false)}></div>
+            <ConfirmDelete 
+               currentDoc={currentDoc} 
+               confirmDeletion={confirmDeletion} 
+               setIsDeleting={setIsDeleting} 
+            />
          )}
       </>
    );
