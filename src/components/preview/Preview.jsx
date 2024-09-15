@@ -2,16 +2,207 @@ import { useSelector, useDispatch } from 'react-redux';
 import { toggleMarkdown } from '../../redux/features/viewSlice';
 import './preview.scss';
 
-function Preview({ 
-   // isMarkdownVisible,
-   // toggleMarkdown,
-}) {
+function Preview({ }) {
 
    const dispatch = useDispatch();
+   const text = useSelector((state) => state.text.text); // получаем текст из Redux
    const { isMarkdownVisible } = useSelector((state) => state.view);
 
    const handleToggleMarkdown = () => {
       dispatch(toggleMarkdown());
+   };
+
+   const renderMarkdown = (text) => {
+      const lines = text.split('\n');
+      const elements = [];
+      let unorderedListItems = [];
+      let orderedListItems = [];
+      let currentOrderIndex = 1;
+      let isInCodeBlock = false;
+      let codeBlockContent = [];
+
+      const flushList = (key) => {
+         if (unorderedListItems.length > 0) {
+         elements.push(
+            <ul key={`${key}-unordered`} className="unordered-list">
+               {unorderedListItems}
+            </ul>
+         );
+         unorderedListItems = [];
+         }
+         if (orderedListItems.length > 0) {
+         elements.push(
+            <ol key={`${key}-ordered`} className="ordered-list">
+               {orderedListItems}
+            </ol>
+         );
+         orderedListItems = [];
+         currentOrderIndex = 1;
+         }
+      };
+
+      const renderTextWithLinks = (text) => {
+         const linkRegex = /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g;
+         const parts = [];
+         let lastIndex = 0;
+         let match;
+
+         while ((match = linkRegex.exec(text)) !== null) {
+         const [fullMatch, linkText, url] = match;
+         const startIndex = match.index;
+         if (startIndex > lastIndex) {
+            parts.push(text.substring(lastIndex, startIndex));
+         }
+         parts.push(
+            <span key={url} className="link">
+               <a href={url} target="_blank" rel="noopener noreferrer">
+               {linkText}
+               </a>
+            </span>
+         );
+         lastIndex = startIndex + fullMatch.length;
+         }
+         if (lastIndex < text.length) {
+         parts.push(text.substring(lastIndex));
+         }
+
+         return parts;
+      };
+
+      const renderInlineSnippets = (text) => {
+         const snippetRegex = /`([^`]+)`/g;
+         const parts = [];
+         let lastIndex = 0;
+         let match;
+
+         while ((match = snippetRegex.exec(text)) !== null) {
+         const [fullMatch, snippetText] = match;
+         const startIndex = match.index;
+
+         if (startIndex > lastIndex) {
+            parts.push(text.substring(lastIndex, startIndex));
+         }
+
+         parts.push(
+            <span key={startIndex} className="inline-snippet">
+               {snippetText}
+            </span>
+         );
+
+         lastIndex = startIndex + fullMatch.length;
+         }
+
+         if (lastIndex < text.length) {
+         parts.push(text.substring(lastIndex));
+         }
+
+         return parts;
+      };
+
+      lines.forEach((line, index) => {
+         const trimmedLine = line.trim();
+
+         if (trimmedLine.startsWith('```')) {
+         if (isInCodeBlock) {
+            elements.push(
+               <div key={`codeblock-${index}`} className="snippet-wrapper">
+               {codeBlockContent.map((codeLine, i) => (
+                  <p key={`code-line-${i}`} className="snippet-text">
+                     {codeLine}
+                  </p>
+               ))}
+               </div>
+            );
+            codeBlockContent = [];
+            isInCodeBlock = false;
+         } else {
+            isInCodeBlock = true;
+         }
+         return;
+         }
+
+         if (isInCodeBlock) {
+         codeBlockContent.push(line);
+         return;
+         }
+
+         if (trimmedLine === '') {
+         flushList(`list-${index}`);
+         elements.push(<p key={`empty-${index}`}>&nbsp;</p>);
+         } else if (line.startsWith('######')) {
+         const content = line.slice(6).trim();
+         flushList(`list-${index}`);
+         elements.push(<h6 key={index} className="preview-xxs">{content}</h6>);
+         } else if (line.startsWith('#####')) {
+         const content = line.slice(5).trim();
+         flushList(`list-${index}`);
+         elements.push(<h5 key={index} className="preview-xs">{content}</h5>);
+         } else if (line.startsWith('####')) {
+         const content = line.slice(4).trim();
+         flushList(`list-${index}`);
+         elements.push(<h4 key={index} className="preview-s">{content}</h4>);
+         } else if (line.startsWith('###')) {
+         const content = line.slice(3).trim();
+         flushList(`list-${index}`);
+         elements.push(<h3 key={index} className="preview-m">{content}</h3>);
+         } else if (line.startsWith('##')) {
+         const content = line.slice(2).trim();
+         flushList(`list-${index}`);
+         elements.push(<h2 key={index} className="preview-l">{content}</h2>);
+         } else if (line.startsWith('#')) {
+         const content = line.slice(1).trim();
+         flushList(`list-${index}`);
+         elements.push(<h1 key={index} className="preview-xl">{content}</h1>);
+         } else if (line.startsWith('-')) {
+         const content = line.slice(1).trim();
+         unorderedListItems.push(
+            <li key={index} className="body">
+               {renderTextWithLinks(renderInlineSnippets(content).join(''))}
+            </li>
+         );
+         } else if (/^\d+\.\s/.test(line)) {
+         const lineNumber = parseInt(line.match(/^(\d+)\./)[1], 10);
+         const content = line.replace(/^\d+\.\s/, '').trim();
+
+         if (lineNumber === currentOrderIndex) {
+            orderedListItems.push(
+               <li key={index} className="body">
+               {renderTextWithLinks(renderInlineSnippets(content).join(''))}
+               </li>
+            );
+            currentOrderIndex += 1;
+         } else {
+            flushList(`list-${index}`);
+            orderedListItems.push(
+               <li key={index} className="body">
+               {renderTextWithLinks(renderInlineSnippets(content).join(''))}
+               </li>
+            );
+            currentOrderIndex = lineNumber + 1;
+         }
+         } else if (line.startsWith('>')) {
+         const content = line.slice(1).trim();
+         flushList(`list-${index}`);
+         elements.push(
+            <div key={`blockquote-${index}`} className="blockquote">
+               <p className="body-bold">
+               {renderTextWithLinks(renderInlineSnippets(content).join(''))}
+               </p>
+            </div>
+         );
+         } else {
+         flushList(`list-${index}`);
+         elements.push(
+            <p key={index} className="body">
+               {renderTextWithLinks(renderInlineSnippets(trimmedLine).join(''))}
+            </p>
+         );
+         }
+      });
+
+      flushList('last-list');
+
+      return elements;
    };
    return (
       <div className="preview">
@@ -28,7 +219,7 @@ function Preview({
             </button>
          </div>
          <div className={`primary-padding ${isMarkdownVisible ? 'result' : 'result-wide'}`}>
-          
+            {renderMarkdown(text)}
          </div>
       </div>
    );

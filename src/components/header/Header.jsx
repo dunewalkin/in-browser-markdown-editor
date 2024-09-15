@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import './header.scss';
 import ConfirmDelete from '../confirm-delete/ConfirmDelete';
 import DocumentInfo from '../document-info/DocumentInfo';
 import Navigation from '../navigation/Navigation';
+import { toggleNav } from '../../redux/features/navSlice';
 import menuOpenIcon from '../../assets/images/icon-menu.svg';
 import menuCloseIcon from '../../assets/images/icon-close.svg';
 import logo from '../../assets/images/logo.svg';
@@ -10,100 +12,109 @@ import saveIcon from '../../assets/images/icon-save.svg';
 
 
 function Header({ 
-   isNavVisible,
-   setIsNavVisible,
-   toggleNavVisible,
-   theme,
-   toggleTheme,
-   saveDocument,
-   currentDoc,
-   createNewDocument,
-   documents,
-   setCurrentDoc,
-   confirmDeletion,
-   isDeleting,
-   setIsDeleting,
-   updateDocumentName,
-   docName,
-   setDocName 
+   // isNavVisible,
+   // setIsNavVisible,
+   // toggleNavVisible,
+   // theme,
+   // toggleTheme,
+   // saveDocument,
+   // currentDoc,
+   // createNewDocument,
+   // documents,
+   // setCurrentDoc,
+   // confirmDeletion,
+   // isDeleting,
+   // setIsDeleting,
+   // updateDocumentName,
+   // docName,
+   // setDocName 
 }) {
 
-   const [isEditing, setIsEditing] = useState(false);
+   const dispatch = useDispatch();
+   const isNavVisible = useSelector((state) => state.nav.isNavVisible);
 
-   useEffect(() => {
-      
-      const handleClickOutside = (e) => {
-         const navWrapper = document.querySelector('.nav-wrapper');
-         if (navWrapper && !navWrapper.contains(e.target) && isNavVisible) {
-            toggleNavVisible(); 
-         }
-      };
-
-      document.addEventListener('mousedown', handleClickOutside);
-
-      return () => {
-         document.removeEventListener('mousedown', handleClickOutside);
-      };
-   }, [isNavVisible, toggleNavVisible]);
-
-   const formatDate = (dateString) => {
-      const options = { day: '2-digit', month: 'long', year: 'numeric' };
-      return new Date(dateString).toLocaleDateString('en-GB', options);
-   };
-
-   useEffect(() => {
-      setDocName(currentDoc);
-   }, [currentDoc]);
-
-   const handleDocNameChange = (e) => {
-      setDocName(e.target.value);
-   };
-
-   const handleBlur = () => {
-      if (docName.trim() === '') {
-         setDocName(currentDoc); 
-      } else {
-         updateDocumentName(docName.trim()); 
-      }
-      setIsEditing(false); 
-   };
-
-   const handleKeyDown = (e) => {
-      if (e.key === 'Enter') {
-         handleBlur(); 
-      }
-   };
-
-   const changeDocName = () => {
-      setIsEditing(true);
-      setTimeout(() => {
-         const extensionIndex = docName.lastIndexOf('.md'); 
-         if (extensionIndex !== -1) {
-            document.querySelector('.doc-name-input').setSelectionRange(0, extensionIndex); 
-         }
-      }, 0); 
-   };
-
-   const handleDocumentSelection = (docName) => {
-      setCurrentDoc(docName);
-      setIsNavVisible(false);
-   };
-   
-   const deleteDocument = () => {
-      setIsDeleting(true);
+   const toggleNavVisible = () => {
+      dispatch(toggleNav());
    }
+
+   // const [isEditing, setIsEditing] = useState(false);
+
+   // useEffect(() => {
+      
+   //    const handleClickOutside = (e) => {
+   //       const navWrapper = document.querySelector('.nav-wrapper');
+   //       if (navWrapper && !navWrapper.contains(e.target) && isNavVisible) {
+   //          toggleNavVisible(); 
+   //       }
+   //    };
+
+   //    document.addEventListener('mousedown', handleClickOutside);
+
+   //    return () => {
+   //       document.removeEventListener('mousedown', handleClickOutside);
+   //    };
+   // }, [isNavVisible, toggleNavVisible]);
+
+   // const formatDate = (dateString) => {
+   //    const options = { day: '2-digit', month: 'long', year: 'numeric' };
+   //    return new Date(dateString).toLocaleDateString('en-GB', options);
+   // };
+
+   // useEffect(() => {
+   //    setDocName(currentDoc);
+   // }, [currentDoc]);
+
+   // const handleDocNameChange = (e) => {
+   //    setDocName(e.target.value);
+   // };
+
+   // const handleBlur = () => {
+   //    if (docName.trim() === '') {
+   //       setDocName(currentDoc); 
+   //    } else {
+   //       updateDocumentName(docName.trim()); 
+   //    }
+   //    setIsEditing(false); 
+   // };
+
+   // const handleKeyDown = (e) => {
+   //    if (e.key === 'Enter') {
+   //       handleBlur(); 
+   //    }
+   // };
+
+   // const changeDocName = () => {
+   //    setIsEditing(true);
+   //    setTimeout(() => {
+   //       const extensionIndex = docName.lastIndexOf('.md'); 
+   //       if (extensionIndex !== -1) {
+   //          document.querySelector('.doc-name-input').setSelectionRange(0, extensionIndex); 
+   //       }
+   //    }, 0); 
+   // };
+
+   // const handleDocumentSelection = (docName) => {
+   //    setCurrentDoc(docName);
+   //    setIsNavVisible(false);
+   // };
+   
+   // const deleteDocument = () => {
+   //    setIsDeleting(true);
+   // }
+
+   
 
    return (
       <> 
          <Navigation 
-            isNavVisible={isNavVisible} 
-            toggleNavVisible={toggleNavVisible} 
-            documents={documents} 
-            createNewDocument={createNewDocument} 
-            handleDocumentSelection={handleDocumentSelection} 
-            formatDate={formatDate} 
-            theme={theme} 
-            toggleTheme={toggleTheme}
+            // isNavVisible={isNavVisible} 
+            // toggleNavVisible={toggleNavVisible} 
+            // documents={documents} 
+            // createNewDocument={createNewDocument} 
+            // handleDocumentSelection={handleDocumentSelection} 
+            // formatDate={formatDate} 
+            // theme={theme} 
+            // toggleTheme={toggleTheme}
          />
          <header className={`header-wrapper ${isNavVisible ? 'phased-wrapper' : ''}`}>
             <div className='header-main-group'>
@@ -112,7 +123,7 @@ function Header({
                   className='nav-btn'>
                      <img src={isNavVisible ? menuCloseIcon : menuOpenIcon} alt={isNavVisible ? 'Close menu' : 'Open menu'} />
                </button>
-               <div className='logo-doc-wrapper'>
+               {/* <div className='logo-doc-wrapper'>
                   <div className='logo-wrapper-header'>
                      <img src={logo} alt="Logo" />
                   </div>
@@ -125,9 +136,9 @@ function Header({
                      handleKeyDown={handleKeyDown} 
                      changeDocName={changeDocName}
                   />
-               </div>
+               </div> */}
             </div>
-            <div className='header-btn-wrapper'>
+            {/* <div className='header-btn-wrapper'>
                <button className='delete-btn' 
                aria-label="Delete document"
                onClick={deleteDocument}
@@ -138,18 +149,39 @@ function Header({
                   <img src={saveIcon} alt="Save" />
                   <span className='heading-m'>Save Changes</span>
                </div>
-            </div>
+            </div> */}
          </header>
-         {isDeleting && (
+         {/* {isDeleting && (
             <ConfirmDelete 
                currentDoc={currentDoc} 
                confirmDeletion={confirmDeletion} 
                setIsDeleting={setIsDeleting} 
             />
-         )}
+         )} */}
       </>
    );
 }
 
 export default Header;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
