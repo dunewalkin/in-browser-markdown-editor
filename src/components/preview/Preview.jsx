@@ -1,20 +1,25 @@
-import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleMarkdown } from '../../redux/features/viewSlice';
 import './preview.scss';
 
 function Preview({ 
-   renderMarkdown,
-   text,
-   isMarkdownVisible,
-   toggleMarkdown,
-   theme
+   // isMarkdownVisible,
+   // toggleMarkdown,
 }) {
+
+   const dispatch = useDispatch();
+   const { isMarkdownVisible } = useSelector((state) => state.view);
+
+   const handleToggleMarkdown = () => {
+      dispatch(toggleMarkdown());
+   };
    return (
       <div className="preview">
          <div className={`primary-padding header-section ${isMarkdownVisible ? '' :'header-section-wide' }`}>
             <h1 className="section-header">PREVIEW</h1>
             <button 
-               className={`preview-btn ${theme === 'dark' ? 'preview-btn-dark' : 'preview-btn-light'}`}
-               onClick={toggleMarkdown}
+               className='preview-btn preview-btn-light'
+               onClick={handleToggleMarkdown}
                aria-label="Toggle markdown"
             >
                   {isMarkdownVisible ? 
@@ -23,7 +28,7 @@ function Preview({
             </button>
          </div>
          <div className={`primary-padding ${isMarkdownVisible ? 'result' : 'result-wide'}`}>
-            {renderMarkdown(text)}
+          
          </div>
       </div>
    );
