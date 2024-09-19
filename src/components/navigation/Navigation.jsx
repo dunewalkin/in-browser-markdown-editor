@@ -1,6 +1,12 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleTheme } from '../../redux/features/themeSlice';
+
 import './navigation.scss';
+
+import { toggleTheme } from '../../redux/features/themeSlice';
+import { setDocuments, setCurrentDoc } from '../../redux/features/docSlice';
+import { setText } from '../../redux/features/textSlice';
+import { hideNav } from '../../redux/features/navSlice';
+
 import documentIcon from '../../assets/images/icon-document.svg';
 import iconSunLight from '../../assets/images/icon-sun-light.svg';
 import iconSunDark from '../../assets/images/icon-sun-dark.svg';
@@ -8,22 +14,59 @@ import iconMoonLight from '../../assets/images/icon-moon-light.svg';
 import iconMoonDark from '../../assets/images/icon-moon-dark.svg';
 import logo from '../../assets/images/logo.svg';
 
-function Navigation({ 
-   // isNavVisible, 
-   // documents, 
-   // createNewDocument, 
-   // handleDocumentSelection, 
-   // formatDate, 
-   // theme, 
-   // toggleTheme 
-}) {
+function Navigation({ }) {
    const dispatch = useDispatch();
-   const theme = useSelector((state) => state.theme.theme);
-   const isNavVisible = useSelector((state) => state.nav.isNavVisible);
+   const { theme } = useSelector((state) => state.theme);
+   const { isNavVisible } = useSelector((state) => state.nav);
+   const { documents } = useSelector((state) => state.documents);
    
    const handleToggleTheme = () => {
       dispatch(toggleTheme());
    };
+
+   const getUniqueName = (baseName) => {
+      let name = baseName;
+      let counter = 1;
+   
+      if (documents.some(doc => doc.name === name)) {
+         while (documents.some(doc => doc.name === name)) {
+            name = `${baseName.slice(0, -3)}-${counter}.md`;
+            counter++;
+         }
+      }
+   
+      return name;
+   };
+   
+   const createNewDocument = () => {
+      const newDocumentName = getUniqueName("untitled-document.md");
+      const newDocument = {
+         createdAt: new Date().toISOString().split('T')[0],
+         name: newDocumentName,
+         content: ''
+      };
+   
+      const updatedData = [...documents, newDocument];
+      dispatch(setDocuments(updatedData));
+   
+      console.log("Updated Documents Array:", updatedData);
+   
+      dispatch(setText(newDocument.content));
+      dispatch(setCurrentDoc(newDocument.name));
+
+      dispatch(hideNav());
+   };
+
+   const formatDate = (dateString) => {
+      const options = { day: '2-digit', month: 'long', year: 'numeric' };
+      return new Date(dateString).toLocaleDateString('en-GB', options);
+   };
+
+   const handleDocumentSelection = (docName) => {
+      dispatch(setCurrentDoc(docName));
+      dispatch(hideNav());
+   };
+
    
    
    return (
@@ -33,7 +76,7 @@ function Navigation({
                <img src={logo} alt="Logo" />
             </div>
             <h1 className='section-header'>MY DOCUMENTS</h1>
-            {/* <button className='primary-btn create-btn' onClick={createNewDocument}>
+            <button className='primary-btn create-btn' onClick={createNewDocument}>
                <span className='heading-m'>+ New Document</span>
             </button>
             <div className='documents-wrapper'>
@@ -50,7 +93,7 @@ function Navigation({
                      </div>
                   </div>
                ))}
-            </div> */}
+            </div>
          </div>
          <div className='toggle-wrapper'>
             <div className='icon-moon-wrapper'>

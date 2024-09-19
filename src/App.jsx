@@ -1,19 +1,22 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { toggleMarkdown, togglePreview, setSmallScreen } from './redux/features/viewSlice';
 import { useEffect } from 'react';
-import Header from './components/header/Header';
-import Editor from './components/editor/Editor';
-import Preview from './components/preview/Preview';
+import { useDispatch, useSelector } from 'react-redux';
+
 import './assets/styles/fonts.scss';
 import './assets/styles/typography.scss';
 import './assets/styles/global.scss';
 import './assets/styles/buttons.scss';
 
+import { setSmallScreen } from './redux/features/viewSlice';
+
+import Header from './components/header/Header';
+import Editor from './components/editor/Editor';
+import Preview from './components/preview/Preview';
+
 function App() {
    const dispatch = useDispatch();
+   const { theme } = useSelector((state) => state.theme);
    const { isMarkdownVisible, isPreviewVisible, isSmallScreen } = useSelector((state) => state.view);
-   const isNavVisible = useSelector((state) => state.nav.isNavVisible);
-
+   const { isNavVisible } = useSelector((state) => state.nav);
 
    useEffect(() => {
       const handleResize = () => {
@@ -26,29 +29,15 @@ function App() {
       return () => window.removeEventListener('resize', handleResize);
    }, [dispatch]);
 
+
+   useEffect(() => {
+      document.body.className = theme;
+      localStorage.setItem('theme', theme);
+   }, [theme]);
+
    return (
       <>
-         <Header
-            // theme={theme}
-            // toggleTheme={toggleTheme}
-            // isNavVisible={isNavVisible}
-            // setIsNavVisible={setIsNavVisible}
-            // toggleNavVisible={toggleNavVisible}
-            // saveDocument={saveDocument}
-            // createNewDocument={createNewDocument}
-            // currentDoc={currentDoc}
-            // currentDocDate={currentDocument ? currentDocument.createdAt : ''}
-            // documents={documents}
-            // setCurrentDoc={setCurrentDoc}
-            // handleDocumentClick={handleDocumentClick}
-            // confirmDeletion={confirmDeletion}
-            // isDeleting={isDeleting}
-            // setIsDeleting={setIsDeleting}
-            // updateDocumentName={updateDocumentName}
-            // docName={docName}
-            // setDocName={setDocName}
-            // isSmallScreen={isSmallScreen}
-         />
+         <Header/>
          <div className={`markdown-wrapper ${isNavVisible ? 'phased-wrapper' : ''}`}>
             {isMarkdownVisible && <Editor />}
             {(isPreviewVisible || !isSmallScreen) && ( <Preview />)}

@@ -1,12 +1,23 @@
+import { useEffect } from 'react';
+
+import './editor.scss';
+
 import { useSelector, useDispatch } from 'react-redux';
 import { togglePreview } from '../../redux/features/viewSlice';
 import { setText } from '../../redux/features/textSlice';
-import './editor.scss';
+
 
 function Editor() {
    const dispatch = useDispatch();
-   const text = useSelector((state) => state.text.text); 
+   const { text } = useSelector((state) => state.text); 
+   const { theme } = useSelector((state) => state.theme);
    const { isMarkdownVisible, isSmallScreen } = useSelector((state) => state.view);
+   const { currentDoc, documents }= useSelector((state) => state.documents);
+
+   useEffect(() => {
+      const doc = documents.find(file => file.name === currentDoc);
+      dispatch(setText(doc ? doc.content : ''));
+   }, [currentDoc, documents, dispatch]);
 
    const handleTogglePreview = () => {
       dispatch(togglePreview());
@@ -14,26 +25,26 @@ function Editor() {
 
    const handleChange = (e) => {
       dispatch(setText(e.target.value));
-    };
-  
-    const handleKeyDown = (e) => {
+   };
+
+   const handleKeyDown = (e) => {
       if (e.key === "Tab") {
-        e.preventDefault();
-  
-        const textarea = e.target;
-        const start = textarea.selectionStart;
-        const end = textarea.selectionEnd;
-  
-        const tabSize = 2;
-        const tab = " ".repeat(tabSize);
-  
-        dispatch(setText(text.substring(0, start) + tab + text.substring(end)));
-  
-        setTimeout(() => {
-          textarea.selectionStart = textarea.selectionEnd = start + tabSize;
-        }, 0);
+      e.preventDefault();
+
+      const textarea = e.target;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+
+      const tabSize = 2;
+      const tab = " ".repeat(tabSize);
+
+      dispatch(setText(text.substring(0, start) + tab + text.substring(end)));
+
+      setTimeout(() => {
+         textarea.selectionStart = textarea.selectionEnd = start + tabSize;
+      }, 0);
       }
-    };
+   };
 
    return ( 
       <div className="editor">
@@ -41,8 +52,8 @@ function Editor() {
             <h1 className="section-header">MARKDOWN</h1>
             {isSmallScreen && (
                <button 
-               className='preview-btn preview-btn-light'
-               aria-label="Toggle markdown"
+               className={`preview-btn ${theme === 'dark' ? 'preview-btn-dark' : 'preview-btn-light'}`}
+               aria-label="Toggle markdown preview"
                onClick={handleTogglePreview}
                >
                {isMarkdownVisible ? 
@@ -63,4 +74,3 @@ function Editor() {
 }
 
 export default Editor;
-

@@ -11,15 +11,12 @@ const navSlice = createSlice({
       toggleNav: (state) => {
          state.isNavVisible = !state.isNavVisible;
       },
-      showNav: (state) => {
-         state.isNavVisible = true;
-      },
       hideNav: (state) => {
          state.isNavVisible = false;
       },
    },
 });
 
-export const { toggleNav, showNav, hideNav } = navSlice.actions;
+export const { toggleNav, hideNav } = navSlice.actions;
 
 export default navSlice.reducer;
