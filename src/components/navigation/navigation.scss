@@ -8,7 +8,7 @@
    position: fixed;
    left: 0;
    top: 0;
-   @include width-height(15.625rem, 100vh);
+   @include width-height(15.625rem, 100dvh);
    background: var(--clr-neutral-2);
    padding: 1.69rem 1.5rem 1.5rem;
 }
