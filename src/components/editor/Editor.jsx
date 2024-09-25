@@ -12,6 +12,8 @@ function Editor({localText, setLocalText}) {
    const dispatch = useDispatch();
    const { theme } = useSelector((state) => state.theme);
    const { isMarkdownVisible, isSmallScreen } = useSelector((state) => state.view);
+   const currentDoc = useSelector(state => state.documents.currentDoc);
+   const documents = useSelector(state => state.documents.documents);
 
    const text = useSelector(state => state.documents.text);
 
@@ -19,6 +21,16 @@ function Editor({localText, setLocalText}) {
    //    const doc = documents.find(file => file.name === currentDoc);
    //    dispatch(setText(doc ? doc.content : ''));
    // }, [currentDoc, documents, dispatch]);
+
+   // useEffect(() => {
+   //    const doc = documents.find(file => file.name === currentDoc);
+   //    setText(doc ? doc.content : '');  // Загружаем содержимое документа при переключении
+   // }, [currentDoc, documents]);
+
+   useEffect(() => {
+      const doc = documents.find(file => file.name === currentDoc);
+      dispatch(setText(doc ? doc.content : ''));  // Используем dispatch для обновления состояния текста в Redux
+   }, [currentDoc, documents, dispatch]);
 
    const handleTogglePreview = () => {
       dispatch(togglePreview());
@@ -47,8 +59,43 @@ function Editor({localText, setLocalText}) {
    //    }
    // };
 
+   // const handleChange = (e) => {
+   //    dispatch(setText(e.target.value));
+   // };
+
+   // const handleChange = (e) => {
+   //    const newText = e.target.value;
+   //    console.log("Text being typed:", newText);
+   //    dispatch(setText(newText));  // Обновляем состояние текста
+   // };
+
    const handleChange = (e) => {
-      dispatch(setText(e.target.value));
+      const newText = e.target.value;
+      console.log("Text being typed:", newText);
+      dispatch(setText(newText));  // Обновляем состояние текста
+   
+      // // Проверим сразу после dispatch
+      // const docText = useSelector(state => state.documents.text); 
+      // console.log("Redux state after typing:", docText);
+   };
+
+   const handleKeyDown = (e) => {
+      if (e.key === "Tab") {
+      e.preventDefault();
+
+      const textarea = e.target;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+
+      const tabSize = 2;
+      const tab = " ".repeat(tabSize);
+
+      setText(text.substring(0, start) + tab + text.substring(end));
+
+      setTimeout(() => {
+         textarea.selectionStart = textarea.selectionEnd = start + tabSize;
+      }, 0);
+      }
    };
 
    return ( 
@@ -72,7 +119,7 @@ function Editor({localText, setLocalText}) {
             aria-label="Markdown editor"
             value={text}
             onChange={handleChange}
-            // onKeyDown={handleKeyDown}
+            onKeyDown={handleKeyDown}
          />
       </div>       
    );

@@ -45,7 +45,6 @@ function App() {
             {(isPreviewVisible || !isSmallScreen) && ( <Preview localText={localText} />)}
          </div>
       </>
-      
   );
 }
 

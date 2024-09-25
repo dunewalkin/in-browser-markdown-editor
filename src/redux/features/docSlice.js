@@ -69,9 +69,16 @@ const docSlice = createSlice({
          state.text = action.payload;
          const docIndex = state.documents.findIndex(file => file.name === state.currentDoc);
          if (docIndex !== -1) {
-            state.documents[docIndex].content = action.payload;
+            state.documents[docIndex].content = action.payload;  // Обновляем контент текущего документа
          }
       }
+      // setText: (state, action) => {
+      //    state.text = action.payload;
+      //    const docIndex = state.documents.findIndex(file => file.name === state.currentDoc);
+      //    if (docIndex !== -1) {
+      //       state.documents[docIndex].content = action.payload;
+      //    }
+      // }
    }
 });
 

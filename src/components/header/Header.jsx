@@ -44,10 +44,23 @@ function Header({}) {
       };
    }, [isNavVisible, toggleNavVisible]);
 
+   // const saveDocument = () => {
+   //    const updatedDocuments = documents.map(doc => {
+   //       if (doc.name === currentDoc) {
+   //          return { ...doc, content: text }; 
+   //       }
+   //       return doc;
+   //    });
+   
+   //    dispatch(setDocuments(updatedDocuments)); 
+   //    console.log("Updated Documents:", updatedDocuments);
+   // };
+
+
    const saveDocument = () => {
       const updatedDocuments = documents.map(doc => {
          if (doc.name === currentDoc) {
-            return { ...doc, content: text }; 
+            return { ...doc, content: text };  // Используем текст из Redux
          }
          return doc;
       });
