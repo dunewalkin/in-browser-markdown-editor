@@ -4,15 +4,16 @@ import './editor.scss';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { togglePreview } from '../../redux/features/viewSlice';
-import { setText } from '../../redux/features/textSlice';
+
+import { setCurrentDoc, setText } from '../../redux/features/docSlice';
 
 
 function Editor({localText, setLocalText}) {
    const dispatch = useDispatch();
-   // const { text } = useSelector((state) => state.text); 
    const { theme } = useSelector((state) => state.theme);
    const { isMarkdownVisible, isSmallScreen } = useSelector((state) => state.view);
-   const { currentDoc, documents }= useSelector((state) => state.documents);
+
+   const text = useSelector(state => state.documents.text);
 
    // useEffect(() => {
    //    const doc = documents.find(file => file.name === currentDoc);
@@ -23,27 +24,31 @@ function Editor({localText, setLocalText}) {
       dispatch(togglePreview());
    };
 
+   // const handleChange = (e) => {
+   //    setLocalText(e.target.value);
+   // };
+
+   // const handleKeyDown = (e) => {
+   //    if (e.key === "Tab") {
+   //    e.preventDefault();
+
+   //    const textarea = e.target;
+   //    const start = textarea.selectionStart;
+   //    const end = textarea.selectionEnd;
+
+   //    const tabSize = 2;
+   //    const tab = " ".repeat(tabSize);
+
+   //    setLocalText(text.substring(0, start) + tab + text.substring(end));
+
+   //    setTimeout(() => {
+   //       textarea.selectionStart = textarea.selectionEnd = start + tabSize;
+   //    }, 0);
+   //    }
+   // };
+
    const handleChange = (e) => {
-      setLocalText(e.target.value);
-   };
-
-   const handleKeyDown = (e) => {
-      if (e.key === "Tab") {
-      e.preventDefault();
-
-      const textarea = e.target;
-      const start = textarea.selectionStart;
-      const end = textarea.selectionEnd;
-
-      const tabSize = 2;
-      const tab = " ".repeat(tabSize);
-
-      setLocalText(text.substring(0, start) + tab + text.substring(end));
-
-      setTimeout(() => {
-         textarea.selectionStart = textarea.selectionEnd = start + tabSize;
-      }, 0);
-      }
+      dispatch(setText(e.target.value));
    };
 
    return ( 
@@ -65,9 +70,9 @@ function Editor({localText, setLocalText}) {
          <textarea
             className="editor-text primary-padding"
             aria-label="Markdown editor"
-            value={localText}
+            value={text}
             onChange={handleChange}
-            onKeyDown={handleKeyDown}
+            // onKeyDown={handleKeyDown}
          />
       </div>       
    );
