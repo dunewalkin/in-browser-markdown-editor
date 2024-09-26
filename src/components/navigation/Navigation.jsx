@@ -4,7 +4,8 @@ import './navigation.scss';
 
 import { toggleTheme } from '../../redux/features/themeSlice';
 import { setDocuments, setCurrentDoc } from '../../redux/features/docSlice';
-import { setText } from '../../redux/features/textSlice';
+import { setLocalText } from '../../redux/features/docSlice';
+import { setText } from '../../redux/features/docSlice';
 import { hideNav } from '../../redux/features/navSlice';
 
 import documentIcon from '../../assets/images/icon-document.svg';
@@ -37,6 +38,11 @@ function Navigation({ }) {
    
       return name;
    };
+
+   const formatDate = (dateString) => {
+      const options = { day: '2-digit', month: 'long', year: 'numeric' };
+      return new Date(dateString).toLocaleDateString('en-GB', options);
+   };
    
    const createNewDocument = () => {
       const newDocumentName = getUniqueName("untitled-document.md");
@@ -51,24 +57,26 @@ function Navigation({ }) {
    
       console.log("Updated Documents Array:", updatedData);
    
-      dispatch(setText(newDocument.content));
+      dispatch(setLocalText(newDocument.content));
       dispatch(setCurrentDoc(newDocument.name));
 
       dispatch(hideNav());
    };
 
-   const formatDate = (dateString) => {
-      const options = { day: '2-digit', month: 'long', year: 'numeric' };
-      return new Date(dateString).toLocaleDateString('en-GB', options);
-   };
+   // const handleDocumentSelection = (docName) => {
+   //    dispatch(setCurrentDoc(docName));
+   //    dispatch(hideNav());
+   // };
 
    const handleDocumentSelection = (docName) => {
-      dispatch(setCurrentDoc(docName));
-      dispatch(hideNav());
+      const selectedDoc = documents.find(doc => doc.name === docName);
+      if (selectedDoc) {
+          dispatch(setLocalText(selectedDoc.content)); // Загружаем только сохранённый контент
+          dispatch(setCurrentDoc(docName)); // Обновляем текущий документ
+          dispatch(hideNav());
+      }
    };
 
-   
-   
    return (
       <div className={isNavVisible ? 'nav-wrapper' : 'nav-wrapper-hidden'}>
          <div>

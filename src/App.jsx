@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import './assets/styles/fonts.scss';
@@ -17,8 +17,6 @@ function App() {
    const { theme } = useSelector((state) => state.theme);
    const { isMarkdownVisible, isPreviewVisible, isSmallScreen } = useSelector((state) => state.view);
    const { isNavVisible } = useSelector((state) => state.nav);
-
-   const [localText, setLocalText] = useState('');
 
    useEffect(() => {
       const handleResize = () => {
@@ -41,8 +39,8 @@ function App() {
       <>
          <Header/>
          <div className={`markdown-wrapper ${isNavVisible ? 'phased-wrapper' : ''}`}>
-            {isMarkdownVisible && <Editor localText={localText} setLocalText={setLocalText}/>}
-            {(isPreviewVisible || !isSmallScreen) && ( <Preview localText={localText} />)}
+            {isMarkdownVisible && <Editor />}
+            {(isPreviewVisible || !isSmallScreen) && ( <Preview />)}
          </div>
       </>
   );

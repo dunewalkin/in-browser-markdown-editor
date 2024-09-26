@@ -6,13 +6,13 @@ import themeReducer from './features/themeSlice';
 import docReducer from './features/docSlice';
 
 const store = configureStore({
-  reducer: {
-    view: viewReducer,
-    text: textReducer, 
-    nav: navReducer,
-    theme: themeReducer,
-    documents: docReducer,
-  },
+   reducer: {
+      view: viewReducer,
+      text: textReducer, 
+      nav: navReducer,
+      theme: themeReducer,
+      documents: docReducer,
+   },
 });
 
 export default store;

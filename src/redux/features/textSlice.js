@@ -8,11 +8,11 @@ const textSlice = createSlice({
    name: 'text',
    initialState,
    reducers: {
-      setText(state, action) {
+      setLocalText(state, action) {
          state.text = action.payload;
       },
    },
 });
 
-export const { setText } = textSlice.actions;
+export const { setLocalText } = textSlice.actions;
 export default textSlice.reducer;
