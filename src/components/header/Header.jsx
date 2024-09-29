@@ -9,7 +9,6 @@ import Navigation from '../navigation/Navigation';
 
 import { toggleNav } from '../../redux/features/navSlice';
 import { setDocuments } from '../../redux/features/docSlice';
-// import { saveDocuments } from '../../redux/features/docSlice'; 
 
 import menuOpenIcon from '../../assets/images/icon-menu.svg';
 import menuCloseIcon from '../../assets/images/icon-close.svg';
@@ -45,38 +44,16 @@ function Header({}) {
       };
    }, [isNavVisible, toggleNavVisible]);
 
-   // const saveDocument = () => {
-   //    // console.log("Text before saving:", text);  // Логируем текст перед сохранением
-   //    const updatedDocuments = documents.map(doc => {
-   //       if (doc.name === currentDoc) {
-   //          // console.log("Document found for saving:", doc);  // Логируем найденный документ
-   //          return { ...doc, content: text };  // Здесь передаем текст из Redux
-   //       }
-   //       return doc;
-   //    });
-   
-   //    dispatch(setDocuments(updatedDocuments)); 
-   //    // console.log("Updated Documents after saving:", updatedDocuments);  // Логируем обновленные документы
-   // };
-
-   const saveDocument = () => {
-      console.log("Text before saving:", localText);  // Логируем текст перед сохранением
-      
+   const saveDocument = () => {  
       const updatedDocuments = documents.map(doc => {
          if (doc.name === currentDoc) {
-            console.log("Document found for saving:", doc);
-            return { ...doc, content: localText };  // Сохраняем текущий текст в content документа
+            return { ...doc, content: localText };  
          }
          return doc;
       });
    
-      dispatch(setDocuments(updatedDocuments));  // Обновляем состояние документов
-      console.log("Updated Documents after saving:", updatedDocuments);  // Логируем обновленные документы
+      dispatch(setDocuments(updatedDocuments)); 
    };
-
-   // const saveDocument = () => {
-   //    dispatch(saveDocuments());
-   // };
 
    const deleteDocument = () => {
       setIsDeleting(true);

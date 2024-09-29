@@ -4,7 +4,6 @@ import './editor.scss';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { togglePreview } from '../../redux/features/viewSlice';
-
 import { setLocalText, setText } from '../../redux/features/docSlice';
 
 
@@ -15,17 +14,10 @@ function Editor() {
    const { currentDoc, documents } = useSelector(state => state.documents);
    const { localText } = useSelector(state => state.documents);
 
-   // useEffect(() => {
-   //    const doc = documents.find(file => file.name === currentDoc);
-   //    // console.log("Document loaded in useEffect:", doc);  // Логируем текущий документ
-   //    // console.log("Content loaded:", doc ? doc.content : '');  // Логируем содержимое документа
-   //    dispatch(setText(doc ? doc.content : ''));  // Загружаем содержимое в текстовое поле
-   // }, [currentDoc, documents, dispatch]);
-
    useEffect(() => {
       const doc = documents.find(file => file.name === currentDoc);
       if (doc) {
-         dispatch(setText(doc.content));  // Загружаем текст текущего документа в редактор  
+         dispatch(setText(doc.content)); 
       }
    }, [currentDoc, documents, dispatch]);
 

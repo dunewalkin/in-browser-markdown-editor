@@ -1,7 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleMarkdown } from '../../redux/features/viewSlice';
 
 import './preview.scss';
+
+import { toggleMarkdown } from '../../redux/features/viewSlice';
 
 function Preview() {
 

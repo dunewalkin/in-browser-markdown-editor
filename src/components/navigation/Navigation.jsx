@@ -4,7 +4,6 @@ import './navigation.scss';
 
 import { toggleTheme } from '../../redux/features/themeSlice';
 import { setDocuments, setCurrentDoc } from '../../redux/features/docSlice';
-import { setLocalText } from '../../redux/features/docSlice';
 import { setText } from '../../redux/features/docSlice';
 import { hideNav } from '../../redux/features/navSlice';
 
@@ -19,9 +18,7 @@ function Navigation({ }) {
    const dispatch = useDispatch();
    const { theme } = useSelector((state) => state.theme);
    const { isNavVisible } = useSelector((state) => state.nav);
-   const { currentDoc, documents } = useSelector((state) => state.documents);
-
-   
+   const { documents } = useSelector((state) => state.documents);
    
    const handleToggleTheme = () => {
       dispatch(toggleTheme());
@@ -65,43 +62,7 @@ function Navigation({ }) {
       dispatch(hideNav());
    };
 
-   // const handleDocumentSelection = (docName) => {
-   //    dispatch(setCurrentDoc(docName));
-   //    dispatch(hideNav());
-   // };
-
-   // const handleDocumentSelection = (docName) => {
-   //    const selectedDoc = documents.find(doc => doc.name === docName);
-   //    if (selectedDoc) {
-   //        dispatch(setText(selectedDoc.content)); // Загружаем только сохранённый контент
-   //        dispatch(setCurrentDoc(docName)); // Обновляем текущий документ
-   //        dispatch(hideNav());
-   //    }
-   // };
-
-//    const handleDocumentSelection = (docName) => {
-//       const selectedDoc = documents.find(doc => doc.name === docName);
-      
-//       if (selectedDoc) {
-//           console.log("Сохранённый контент документа:", selectedDoc.content); // Выводим сохранённый контент в консоль
-//           dispatch(setCurrentDoc(docName)); // Устанавливаем текущий документ
-//           dispatch(setText(selectedDoc.content)); // Загружаем только сохранённый контент
-//           dispatch(hideNav()); // Скрываем навигацию
-//       }
-//   };
-
 const handleDocumentSelection = (docName) => {
-   // // Находим документ, на который происходит переключение
-   const selectedDoc = documents.find(doc => doc.name === docName);
-
-   // if (selectedDoc) {
-   //    console.log("Сохранённый контент документа:", selectedDoc.content);
-
-   //    // Загружаем только сохранённый контент в текст редактора
-   //    dispatch(setText(selectedDoc.content));
-   // }
-
-   // // Переключаем документ
    dispatch(setCurrentDoc(docName));
    dispatch(hideNav());
 };
