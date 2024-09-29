@@ -9,6 +9,7 @@ import Navigation from '../navigation/Navigation';
 
 import { toggleNav } from '../../redux/features/navSlice';
 import { setDocuments } from '../../redux/features/docSlice';
+// import { saveDocuments } from '../../redux/features/docSlice'; 
 
 import menuOpenIcon from '../../assets/images/icon-menu.svg';
 import menuCloseIcon from '../../assets/images/icon-close.svg';
@@ -20,7 +21,7 @@ function Header({}) {
 
    const dispatch = useDispatch();
    const { isNavVisible } = useSelector((state) => state.nav);
-   const { text } = useSelector((state) => state.documents);
+   const { localText } = useSelector((state) => state.documents);
    const { currentDoc, documents } = useSelector((state) => state.documents);
    const [isDeleting, setIsDeleting] = useState(false);
 
@@ -59,12 +60,12 @@ function Header({}) {
    // };
 
    const saveDocument = () => {
-      console.log("Text before saving:", text);  // Логируем текст перед сохранением
+      console.log("Text before saving:", localText);  // Логируем текст перед сохранением
       
       const updatedDocuments = documents.map(doc => {
          if (doc.name === currentDoc) {
             console.log("Document found for saving:", doc);
-            return { ...doc, content: text };  // Сохраняем текущий текст в content документа
+            return { ...doc, content: localText };  // Сохраняем текущий текст в content документа
          }
          return doc;
       });
@@ -72,6 +73,10 @@ function Header({}) {
       dispatch(setDocuments(updatedDocuments));  // Обновляем состояние документов
       console.log("Updated Documents after saving:", updatedDocuments);  // Логируем обновленные документы
    };
+
+   // const saveDocument = () => {
+   //    dispatch(saveDocuments());
+   // };
 
    const deleteDocument = () => {
       setIsDeleting(true);

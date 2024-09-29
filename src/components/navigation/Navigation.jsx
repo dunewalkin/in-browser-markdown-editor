@@ -19,7 +19,9 @@ function Navigation({ }) {
    const dispatch = useDispatch();
    const { theme } = useSelector((state) => state.theme);
    const { isNavVisible } = useSelector((state) => state.nav);
-   const { documents } = useSelector((state) => state.documents);
+   const { currentDoc, documents } = useSelector((state) => state.documents);
+
+   
    
    const handleToggleTheme = () => {
       dispatch(toggleTheme());
@@ -57,7 +59,7 @@ function Navigation({ }) {
    
       console.log("Updated Documents Array:", updatedData);
    
-      dispatch(setLocalText(newDocument.content));
+      dispatch(setText(newDocument.content));
       dispatch(setCurrentDoc(newDocument.name));
 
       dispatch(hideNav());
@@ -68,14 +70,43 @@ function Navigation({ }) {
    //    dispatch(hideNav());
    // };
 
-   const handleDocumentSelection = (docName) => {
-      const selectedDoc = documents.find(doc => doc.name === docName);
-      if (selectedDoc) {
-          dispatch(setLocalText(selectedDoc.content)); // Загружаем только сохранённый контент
-          dispatch(setCurrentDoc(docName)); // Обновляем текущий документ
-          dispatch(hideNav());
-      }
-   };
+   // const handleDocumentSelection = (docName) => {
+   //    const selectedDoc = documents.find(doc => doc.name === docName);
+   //    if (selectedDoc) {
+   //        dispatch(setText(selectedDoc.content)); // Загружаем только сохранённый контент
+   //        dispatch(setCurrentDoc(docName)); // Обновляем текущий документ
+   //        dispatch(hideNav());
+   //    }
+   // };
+
+//    const handleDocumentSelection = (docName) => {
+//       const selectedDoc = documents.find(doc => doc.name === docName);
+      
+//       if (selectedDoc) {
+//           console.log("Сохранённый контент документа:", selectedDoc.content); // Выводим сохранённый контент в консоль
+//           dispatch(setCurrentDoc(docName)); // Устанавливаем текущий документ
+//           dispatch(setText(selectedDoc.content)); // Загружаем только сохранённый контент
+//           dispatch(hideNav()); // Скрываем навигацию
+//       }
+//   };
+
+const handleDocumentSelection = (docName) => {
+   // // Находим документ, на который происходит переключение
+   const selectedDoc = documents.find(doc => doc.name === docName);
+
+   // if (selectedDoc) {
+   //    console.log("Сохранённый контент документа:", selectedDoc.content);
+
+   //    // Загружаем только сохранённый контент в текст редактора
+   //    dispatch(setText(selectedDoc.content));
+   // }
+
+   // // Переключаем документ
+   dispatch(setCurrentDoc(docName));
+   dispatch(hideNav());
+};
+
+
 
    return (
       <div className={isNavVisible ? 'nav-wrapper' : 'nav-wrapper-hidden'}>

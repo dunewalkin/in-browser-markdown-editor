@@ -5,17 +5,15 @@ import './editor.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { togglePreview } from '../../redux/features/viewSlice';
 
-import { setText } from '../../redux/features/docSlice';
+import { setLocalText, setText } from '../../redux/features/docSlice';
 
 
 function Editor() {
    const dispatch = useDispatch();
    const { theme } = useSelector((state) => state.theme);
    const { isMarkdownVisible, isSmallScreen } = useSelector((state) => state.view);
-   const currentDoc = useSelector(state => state.documents.currentDoc);
-   const documents = useSelector(state => state.documents.documents);
-
-   const text = useSelector(state => state.documents.text);
+   const { currentDoc, documents } = useSelector(state => state.documents);
+   const { localText } = useSelector(state => state.documents);
 
    // useEffect(() => {
    //    const doc = documents.find(file => file.name === currentDoc);
@@ -27,7 +25,7 @@ function Editor() {
    useEffect(() => {
       const doc = documents.find(file => file.name === currentDoc);
       if (doc) {
-         dispatch(setText(doc.content));  // Загружаем текст текущего документа в редактор
+         dispatch(setText(doc.content));  // Загружаем текст текущего документа в редактор  
       }
    }, [currentDoc, documents, dispatch]);
 
@@ -37,7 +35,7 @@ function Editor() {
 
 
    const handleChange = (e) => {
-      dispatch(setText(e.target.value));
+      dispatch(setLocalText(e.target.value));
    };
 
    const handleKeyDown = (e) => {
@@ -51,7 +49,7 @@ function Editor() {
       const tabSize = 2;
       const tab = " ".repeat(tabSize);
 
-      setText(text.substring(0, start) + tab + text.substring(end));
+      setLocalText(localText.substring(0, start) + tab + localText.substring(end));
 
       setTimeout(() => {
          textarea.selectionStart = textarea.selectionEnd = start + tabSize;
@@ -78,7 +76,7 @@ function Editor() {
          <textarea
             className="editor-text primary-padding"
             aria-label="Markdown editor"
-            value={text}
+            value={localText}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
          />

@@ -7,7 +7,7 @@ function Preview() {
 
    const dispatch = useDispatch();
    const { theme } = useSelector((state) => state.theme);
-   const { text } = useSelector((state) => state.documents);
+   const { localText } = useSelector((state) => state.documents);
    const { isMarkdownVisible } = useSelector((state) => state.view);
 
    const handleToggleMarkdown = () => {
@@ -222,7 +222,7 @@ function Preview() {
             </button>
          </div>
          <div className={`primary-padding ${isMarkdownVisible ? 'result' : 'result-wide'}`}>
-            {renderMarkdown(text)}
+            {renderMarkdown(localText)}
          </div>
       </div>
    );
