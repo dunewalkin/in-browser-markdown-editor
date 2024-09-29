@@ -3,17 +3,16 @@ import { useState } from 'react';
 
 import './document-info.scss';
 
-import { setDocuments, setCurrentDoc, setDocName } from '../../redux/features/docSlice';
+import { setDocuments, setCurrentDoc, setDocName, setLocalText, setText } from '../../redux/features/docSlice';
 
 import documentIcon from '../../assets/images/icon-document.svg';
-
 
 function DocumentInfo({ }) {
 
    const dispatch = useDispatch();
 
    const [isEditing, setIsEditing] = useState(false);
-   const {currentDoc, docName} = useSelector((state) => state.documents);
+   const {currentDoc, docName, localText, text } = useSelector((state) => state.documents);
    const { documents } = useSelector((state) => state.documents);
 
    const handleDocNameChange = (e) => {
@@ -53,8 +52,9 @@ function DocumentInfo({ }) {
       dispatch(setDocuments(updatedDocuments));
       
       dispatch(setCurrentDoc(docName)); 
+
+      dispatch(setLocalText(localText)); 
    };
-   
 
    return (
       <div className='doc-info-wrapper header-doc-wrapper' onClick={changeDocName}>

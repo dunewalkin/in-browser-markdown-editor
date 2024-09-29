@@ -43,8 +43,17 @@ const docSlice = createSlice({
       setText: (state, action) => {
          state.text = action.payload;
       },
+      saveDocuments: (state) => {
+         const updatedDocuments = state.documents.map(doc => {
+            if (doc.name === state.currentDoc) {
+               return { ...doc, content: state.localText };  // Сохраняем текущий текст в content документа
+            }
+            return doc;
+         });
+         state.documents = updatedDocuments;
+      }
    }
 });
 
-export const { setDocuments, setCurrentDoc, setDocName, setText, setLocalText } = docSlice.actions;
+export const { setDocuments, setCurrentDoc, setDocName, setText, setLocalText, saveDocuments } = docSlice.actions;
 export default docSlice.reducer;

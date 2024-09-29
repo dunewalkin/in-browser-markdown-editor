@@ -3,9 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import './navigation.scss';
 
 import { toggleTheme } from '../../redux/features/themeSlice';
-import { setDocuments, setCurrentDoc } from '../../redux/features/docSlice';
-import { setText } from '../../redux/features/docSlice';
+import { setDocuments, setCurrentDoc, setText } from '../../redux/features/docSlice';
 import { hideNav } from '../../redux/features/navSlice';
+import { toggleMarkdown } from '../../redux/features/viewSlice';
 
 import documentIcon from '../../assets/images/icon-document.svg';
 import iconSunLight from '../../assets/images/icon-sun-light.svg';
@@ -19,6 +19,8 @@ function Navigation({ }) {
    const { theme } = useSelector((state) => state.theme);
    const { isNavVisible } = useSelector((state) => state.nav);
    const { documents } = useSelector((state) => state.documents);
+
+   const { isMarkdownVisible } = useSelector((state) => state.view);
    
    const handleToggleTheme = () => {
       dispatch(toggleTheme());
@@ -54,17 +56,25 @@ function Navigation({ }) {
       const updatedData = [...documents, newDocument];
       dispatch(setDocuments(updatedData));
    
-      console.log("Updated Documents Array:", updatedData);
+      // console.log("Updated Documents Array:", updatedData);
    
       dispatch(setText(newDocument.content));
       dispatch(setCurrentDoc(newDocument.name));
 
       dispatch(hideNav());
+
+      if(!isMarkdownVisible) {
+         dispatch(toggleMarkdown());
+      }
    };
 
 const handleDocumentSelection = (docName) => {
    dispatch(setCurrentDoc(docName));
    dispatch(hideNav());
+
+   if(!isMarkdownVisible) {
+      dispatch(toggleMarkdown());
+   }
 };
 
 

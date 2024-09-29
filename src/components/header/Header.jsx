@@ -9,6 +9,7 @@ import Navigation from '../navigation/Navigation';
 
 import { toggleNav } from '../../redux/features/navSlice';
 import { setDocuments } from '../../redux/features/docSlice';
+import { saveDocuments } from '../../redux/features/docSlice';
 
 import menuOpenIcon from '../../assets/images/icon-menu.svg';
 import menuCloseIcon from '../../assets/images/icon-close.svg';
@@ -44,15 +45,19 @@ function Header({}) {
       };
    }, [isNavVisible, toggleNavVisible]);
 
-   const saveDocument = () => {  
-      const updatedDocuments = documents.map(doc => {
-         if (doc.name === currentDoc) {
-            return { ...doc, content: localText };  
-         }
-         return doc;
-      });
+   // const saveDocument = () => {  
+   //    const updatedDocuments = documents.map(doc => {
+   //       if (doc.name === currentDoc) {
+   //          return { ...doc, content: localText };  
+   //       }
+   //       return doc;
+   //    });
    
-      dispatch(setDocuments(updatedDocuments)); 
+   //    dispatch(setDocuments(updatedDocuments)); 
+   // };
+
+   const saveDocument = () => {  
+      dispatch(saveDocuments()); 
    };
 
    const deleteDocument = () => {
