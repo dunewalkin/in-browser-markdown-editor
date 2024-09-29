@@ -46,7 +46,7 @@ const docSlice = createSlice({
       saveDocuments: (state) => {
          const updatedDocuments = state.documents.map(doc => {
             if (doc.name === state.currentDoc) {
-               return { ...doc, content: state.localText };  // Сохраняем текущий текст в content документа
+               return { ...doc, content: state.localText };  
             }
             return doc;
          });
